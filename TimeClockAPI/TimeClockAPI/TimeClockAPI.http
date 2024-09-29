@@ -1,0 +1,6 @@
+@TimeClockAPI_HostAddress = http://localhost:5036
+
+GET {{TimeClockAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

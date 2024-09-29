@@ -1,0 +1,15 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/TimeClockAPI/.vs/TimeClockAPI
+/TimeClockAPI/Domain/bin/Debug/net8.0
+/TimeClockAPI/Domain/obj
+/TimeClockAPI/Infrastructure/bin/Debug/net8.0
+/TimeClockAPI/Infrastructure/obj
+/TimeClockAPI/Services/bin/Debug/net8.0
+/TimeClockAPI/Services/obj
+/TimeClockAPI/TimeClockAPI/bin/Debug/net8.0
+/TimeClockAPI/TimeClockAPI/obj
+/TimeClockAPI/Infrastructure/Migrations
+/TimeClockAPI/.vs/ProjectEvaluation
