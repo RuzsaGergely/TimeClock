@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Services.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Services.Clock
 {
     public interface IClockService
     {
-        public Task StartStopClock(string username);
+        public void StartStopClock(string username, ClockStartStopDto data);
+        public ClockStatusDto GetClockStatus(string username);
     }
 }

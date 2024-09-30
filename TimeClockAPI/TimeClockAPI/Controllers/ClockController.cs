@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Clock;
-using System.IdentityModel.Tokens.Jwt;
+using Services.DTO;
 using System.Security.Claims;
 
 namespace TimeClockAPI.Controllers
@@ -19,12 +19,26 @@ namespace TimeClockAPI.Controllers
         }
 
         [HttpPost("StartStop")]
-        public IActionResult StartStopClock()
+        public IActionResult StartStopClock(ClockStartStopDto dto)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
-            // TODO: Fix it, not working.
-            clockService.StartStopClock(identity.FindFirst("sub").Value);
+            var userName = identity?.FindFirst("user")?.Value;
+
+            if (userName == null)
+                return Unauthorized();
+
+            clockService.StartStopClock(userName, dto);
             return Ok();
+        }
+
+        [HttpGet("Status")]
+        public IActionResult GetClockStatus()
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            var userName = identity?.FindFirst("user")?.Value;
+            if (userName == null)
+                return Unauthorized();
+            return Ok(clockService.GetClockStatus(userName));
         }
     }
 }

@@ -45,7 +45,8 @@ namespace Services.Identity
                 new Claim(JwtRegisteredClaimNames.Sub, user.Username),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.Name, user.DisplayName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("user", user.Username)
             };
 
             var token = new JwtSecurityToken(configuration["Jwt:Issuer"],
@@ -92,12 +93,18 @@ namespace Services.Identity
 
         public async Task<User> GetUser(int userId)
         {
-            return await _context.Users.Where(x => x.Id == userId).Include(x => x.ClockEntries).FirstOrDefaultAsync();
+            var result = await _context.Users.Where(x => x.Id == userId).Include(x => x.ClockEntries).FirstOrDefaultAsync();
+            if(result != null)
+                return result;
+            return new User();
         }
 
         public async Task<User> GetUser(string username)
         {
-            return await _context.Users.Where(x => x.Username.ToLower() == username).Include(x => x.ClockEntries).FirstOrDefaultAsync();
+            var result = await _context.Users.Where(x => x.Username.ToLower() == username).Include(x => x.ClockEntries).FirstOrDefaultAsync();
+            if (result != null)
+                return result;
+            return new User();
         }
     }
 }

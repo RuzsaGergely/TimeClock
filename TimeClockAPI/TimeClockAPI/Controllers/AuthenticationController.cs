@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTO;
 using Services.Identity;
+using System.Threading.Tasks;
 
 namespace TimeClockAPI.Controllers
 {
@@ -20,8 +20,8 @@ namespace TimeClockAPI.Controllers
         [HttpPost("Auth")]
         public IActionResult AuthorizeUser(LoginDto loginDto)
         {
-            var authToken = _identityService.AuthorizeUser(loginDto.Username, loginDto.Password);
-            if(authToken != "")
+            var authToken = _identityService.AuthorizeUser(loginDto.Username.ToLower(), loginDto.Password);
+            if (authToken != "")
                 return Ok(authToken);
             return Forbid();
         }
@@ -30,7 +30,7 @@ namespace TimeClockAPI.Controllers
         public async Task<IActionResult> RegisterUser(RegistrationDto registrationDto)
         {
             var result = await _identityService.CreateUser(registrationDto);
-            if(result > 0)
+            if (result > 0)
                 return BadRequest();
             return Ok();
         }
