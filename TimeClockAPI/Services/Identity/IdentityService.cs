@@ -36,7 +36,7 @@ namespace Services.Identity
             return BCrypt.Net.BCrypt.EnhancedVerify(plaintextPw, pwHash);
         }
 
-        private string GenerateToken(User user)
+        private AuthResponseDto GenerateToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512);
@@ -49,16 +49,23 @@ namespace Services.Identity
                 new Claim("user", user.Username)
             };
 
+            DateTime expiration = DateTime.Now.AddMinutes(120);
             var token = new JwtSecurityToken(configuration["Jwt:Issuer"],
                 configuration["Jwt:Issuer"],
                 claims,
-                expires: DateTime.Now.AddMinutes(120),
+                expires: expiration,
                 signingCredentials: credentials);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            AuthResponseDto dto = new AuthResponseDto()
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+                Expires = expiration
+            };
+
+            return dto;
         }
 
-        public string AuthorizeUser(string username, string password)
+        public AuthResponseDto AuthorizeUser(string username, string password)
         {
             var userEntity = _context.Users.Where(x=>x.Username ==  username).FirstOrDefault();
             if(userEntity != null)
@@ -68,7 +75,7 @@ namespace Services.Identity
                     return GenerateToken(userEntity);
                 }
             }
-            return "";
+            return new AuthResponseDto() { Token = "403", Expires = DateTime.Now};
         }
 
         public async Task<int> CreateUser(RegistrationDto registrationDto)

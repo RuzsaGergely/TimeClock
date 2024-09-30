@@ -10,7 +10,7 @@ namespace Services.Identity
 {
     public interface IIdentityService
     {
-        public string AuthorizeUser(string username, string password);
+        public AuthResponseDto AuthorizeUser(string username, string password);
         public Task<int> CreateUser(RegistrationDto registrationDto);
         public Task<User> GetUser(int userId);
         public Task<User> GetUser(string username);

@@ -21,7 +21,7 @@ namespace TimeClockAPI.Controllers
         public IActionResult AuthorizeUser(LoginDto loginDto)
         {
             var authToken = _identityService.AuthorizeUser(loginDto.Username.ToLower(), loginDto.Password);
-            if (authToken != "")
+            if (authToken.Token != "403")
                 return Ok(authToken);
             return Forbid();
         }
