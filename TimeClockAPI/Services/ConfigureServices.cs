@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Clock;
+using Services.Data;
 using Services.Identity;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace Services
         {
             services.AddTransient<IIdentityService, IdentityService>();
             services.AddTransient<IClockService, ClockService>();
+            services.AddTransient<IDataService, DataService>();
             return services;
         }
     }

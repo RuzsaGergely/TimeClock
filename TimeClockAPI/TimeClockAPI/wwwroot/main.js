@@ -137,3 +137,36 @@ function ClockInOut() {
         alert("Egyéb hiba történt küldéskor! # " + error)
     }
 }
+
+function DownloadClockData() {
+    try {
+        fetch("api/Data/DownloadClockDataExcel", {
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("AuthToken")
+            }
+        })
+        .then((response) => response.blob())
+        .then((myblob) => {
+            resolveAndDownloadBlob(myblob)
+        })
+    }
+    catch (error) {
+        console.log(error)
+        alert("Egyéb hiba történt letöltéskor! # " + error)
+    }
+}
+
+// https://stackoverflow.com/questions/34509447/download-file-from-api-using-javascript
+function resolveAndDownloadBlob(response) {
+    let filename = 'ClockData.xlsx';
+    filename = decodeURI(filename);
+    const url = window.URL.createObjectURL(response);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    window.URL.revokeObjectURL(url);
+    link.remove();
+}
